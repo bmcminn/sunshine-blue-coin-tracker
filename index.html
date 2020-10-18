@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Super Mario Sunshine: Blue Coin Guide</title>
+
+	<style>
+		html {
+			box-sizing: border-box;
+		}
+
+		*, *:before, *:after {
+			box-sizing: inherit;
+		}
+
+		body {
+			font-family: sans-serif;
+		}
+
+		.inline { display: inline; }
+		.strike { text-decoration: line-through; }
+
+		details {
+			padding: 0.5em;
+		}
+
+		summary:hover {
+			cursor: pointer;
+		}
+
+		.coin input:hover,
+		.coin label:hover {
+			cursor: pointer;
+		}
+
+
+		.location + .location {
+			border-top: 1px solid #ddd;
+	 	}
+	</style>
+</head>
+<body>
+
+	<h2>SM Sunshine Blue Coin Tracker</h2>
+
+	<p>
+		Blue coin hunting guide by <a href="https://www.imore.com/author/Reb%20Valentine">Reb Valentine</a>, found at <a href="">Super Mario 3D All-Stars: Blue Coin hunting guide for Super Mario Sunshine</a>
+		I merely turned his list into an app to help track my progress.
+	</p>
+
+	<details>
+		<summary>Tutorial</summary>
+		<ol>
+			<li>Open any of the level names listed below to open that levels blue coin checklist</li>
+			<li>Click/tap a given blue coin location description to toggle if you have collected it or not</li>
+			<li>Repeat as necessary</li>
+		</ol>
+
+		<p>
+			Each time you check or uncheck a coin, the page URL is updated with a hash your progress, so feel free to bookmark this page to save your progress and share your progress with your friends!
+		</p>
+	</details>
+
+	<hr>
+
+	<main id="app">
+
+		<div class="small">
+			Collected {{ calcCoinCount }} of {{ coinTotal }}
+
+			<button @click="clearList()">Clear list</button>
+		</div>
+
+
+		<div class="location"
+			v-for="(location, index) in bcLocations"
+			:key="location.name">
+			<details>
+				<summary>
+					<b>{{ index + 1 }}: {{ location.name }}</b>&nbsp;
+					<span class="small">{{ calcLocationCount(location) }} of {{ location.coins.length }}</span>
+				</summary>
+				<p v-if="location.note">
+					NOTE: {{ location.note }}
+				</p>
+				<ol>
+					<li class="coin"
+						v-for="(coin, coindex) in location.coins"
+						:key="coin.desc"
+					>
+						<input
+							:id="hyphenate('coin', location.name, coindex)"
+							:name="hyphenate('coin', location.name, coindex)"
+							type="checkbox"
+							v-model="coin.collected"
+							@change="logCoin"
+						>
+						<label :for="hyphenate('coin', location.name, coindex)"
+							:class="[ coin.collected ? 'strike' : '' ]"
+						>
+							<!-- <strong v-if="coin.episode">Episode: {{ coin.episode }}</strong> -->
+							{{ coin.desc }}
+						</label>
+					</li>
+				</ol>
+			</details>
+
+		</div>
+	</main>
+
+	<p class="text-center">
+		MIT Licensed -
+		Copyright 2020 -
+		<a href="https://github.com/bmcminn">bmcminn</a> Some rights reserved.
+	</p>
+
+	<!-- <script src="https://unpkg.com/vue@next/"></script> -->
+	<script src="https://unpkg.com/vue@3.0.1/dist/vue.global.prod.js"></script>
+	<!-- <script src="/src/vue.global.js"></script> -->
+	<!-- <script src="/src.vue.global.prod.js"></script> -->
+	<script src="/src/app.js"></script>
+</body>
+</html>
