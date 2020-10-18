@@ -380,9 +380,11 @@ const App = {
 
                 qs = qs.length > 0 ? '?coins=' + qs : ''
 
+                let href = window.location.href.split('?')[0]
+
                 history.pushState({
                     id: 'homepage'
-                }, document.title, `${window.location.origin}/${qs}`);
+                }, document.title, `${href}${qs}`);
 
             },
 
