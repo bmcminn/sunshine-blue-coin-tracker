@@ -31,6 +31,7 @@ Each time you check or uncheck a coin, the page URL is updated with a hash your 
 
 ## Changelog
 
+- `10/19/2020` Update UI with `max-width` on app container and some readability improvements
 - `10/19/2020` **BREAKING CHANGE:** Update blue coin descriptions for multiple levels. Generally improving location accuracy and how to collect them, also breaking up entries describing more than one coin into their own checklist entries. *This requires you to redo your list. Sorry!*
 - `10/19/2020` Update `serialize()` and `deserialize()` to use [`lz-string`](https://github.com/pieroxy/lz-string) compression library for progress hashes in URL
 - `10/19/2020` Add `package.json` and include script for running local dev server via `php` for testing

@@ -16,10 +16,8 @@
 
 		body {
 			font-family: sans-serif;
+			line-height: 1.5;
 		}
-
-		.inline { display: inline; }
-		.strike { text-decoration: line-through; }
 
 		details {
 			padding: 0.5em;
@@ -29,8 +27,26 @@
 			cursor: pointer;
 		}
 
+		ol {
+			padding-left: 1.1em
+		}
+
+		.container {
+			width: 100%;
+			max-width: 40em;
+			margin: auto;
+		}
+
+		.inline { display: inline; }
+		.strike { text-decoration: line-through; }
+
+
 		.coin {
 			padding: 0.5em;
+		}
+		.coin input {
+			display: inline-block;
+			margin-right: 0.8em;
 		}
 		.coin input:hover,
 		.coin label:hover {
@@ -45,99 +61,103 @@
 </head>
 <body>
 
-	<h2>SM Sunshine Blue Coin Tracker</h2>
-
-	<p>
-		Blue coin hunting guide by <a href="https://www.imore.com/author/Reb%20Valentine">Reb Valentine</a>, found at <a href=https://www.imore.com/super-mario-3d-all-stars-blue-coin-hunting-guide-super-mario-sunshine">Super Mario 3D All-Stars: Blue Coin hunting guide for Super Mario Sunshine</a>
-	</p>
-
-
-	<details>
-		<summary>App Info</summary>
+	<div class="container">
+		
+		<h2>SM Sunshine Blue Coin Tracker</h2>
 
 		<p>
-			Read the <a href="https://github.com/bmcminn/sunshine-blue-coin-tracker#changelog">Changelog</a> for more updates.
-		</p>
-
-		<h2>Some house keeping:</h2>
-		<p>
-			Please note: I am well aware of the fact there are 240 blue coins in the game. I'm still parsing Reb's list identifying each individual coin as I play through the game myself.
-		</p>
-
-		<p>
-			Also, this list is not written in an optimized order. I merely turned Reb's list into an app to help track my progress while updating some of the coin location descriptions for accuracy and how to easily get them.
-		</p>
-
-		<p>
-			Speed run order may be a future improvement to this list but it's not a priority for me.
-		</p>
-
-		<h2>Tutorial</h2>
-		<ol>
-			<li>Click/tap any of the level names listed below to open its blue coin checklist</li>
-			<li>Click/tap a given blue coin location description to toggle if you have collected it or not</li>
-			<li>Repeat as necessary</li>
-		</ol>
-
-		<p>
-			Each time you check or uncheck a coin, the page URL is updated with a hash your progress, so feel free to bookmark this page to save your progress and share your progress with your friends!
+			Blue coin hunting guide by <a href="https://www.imore.com/author/Reb%20Valentine">Reb Valentine</a>, found at <a href=https://www.imore.com/super-mario-3d-all-stars-blue-coin-hunting-guide-super-mario-sunshine">Super Mario 3D All-Stars: Blue Coin hunting guide for Super Mario Sunshine</a>
 		</p>
 
 
-	</details>
+		<details>
+			<summary>App Info</summary>
 
-	<hr>
+			<p>
+				Read the <a href="https://github.com/bmcminn/sunshine-blue-coin-tracker#changelog">Changelog</a> for more updates.
+			</p>
 
-	<main id="app">
+			<h2>Some house keeping:</h2>
+			<p>
+				Please note: I am well aware of the fact there are 240 blue coins in the game. I'm still parsing Reb's list identifying each individual coin as I play through the game myself.
+			</p>
 
-		<div class="small">
-			Collected {{ calcCoinCount }} of {{ coinTotal }}
+			<p>
+				Also, this list is not written in an optimized order. I merely turned Reb's list into an app to help track my progress while updating some of the coin location descriptions for accuracy and how to easily get them.
+			</p>
 
-			<button @click="clearList()">Clear list</button>
-		</div>
+			<p>
+				Speed run order may be a future improvement to this list but it's not a priority for me.
+			</p>
+
+			<h2>Tutorial</h2>
+			<ol>
+				<li>Click/tap any of the level names listed below to open its blue coin checklist</li>
+				<li>Click/tap a given blue coin location description to toggle if you have collected it or not</li>
+				<li>Repeat as necessary</li>
+			</ol>
+
+			<p>
+				Each time you check or uncheck a coin, the page URL is updated with a hash your progress, so feel free to bookmark this page to save your progress and share your progress with your friends!
+			</p>
 
 
-		<div class="location"
-			v-for="(location, index) in bcLocations"
-			:key="location.name">
-			<details>
-				<summary>
-					<b>{{ index + 1 }}: {{ location.name }}</b>&nbsp;
-					<span class="small">{{ calcLocationCount(location) }} of {{ location.coins.length }}</span>
-				</summary>
-				<p v-if="location.note">
-					NOTE: <span v-html="location.note"></span>
-				</p>
-				<ol>
-					<li class="coin"
-						v-for="(coin, coindex) in location.coins"
-						:key="coin.desc"
-					>
-						<input
-							:id="hyphenate('coin', location.name, coindex)"
-							:name="hyphenate('coin', location.name, coindex)"
-							type="checkbox"
-							v-model="coin.collected"
-							@change="serialize"
+		</details>
+
+		<hr>
+
+		<main id="app">
+
+			<div class="small">
+				Collected {{ calcCoinCount }} of {{ coinTotal }}
+
+				<button @click="clearList()">Clear list</button>
+			</div>
+
+
+			<div class="location"
+				v-for="(location, index) in bcLocations"
+				:key="location.name">
+				<details>
+					<summary>
+						<b>{{ index + 1 }}: {{ location.name }}</b>&nbsp;
+						<span class="small">{{ calcLocationCount(location) }} of {{ location.coins.length }}</span>
+					</summary>
+					<p v-if="location.note">
+						NOTE: <span v-html="location.note"></span>
+					</p>
+					<ol>
+						<li class="coin"
+							v-for="(coin, coindex) in location.coins"
+							:key="coin.desc"
 						>
-						<label :for="hyphenate('coin', location.name, coindex)"
-							:class="[ coin.collected ? 'strike' : '' ]"
-						>
-							<!-- <strong v-if="coin.episode">Episode: {{ coin.episode }}</strong> -->
-							{{ coin.desc }}
-						</label>
-					</li>
-				</ol>
-			</details>
+							<input
+								:id="hyphenate('coin', location.name, coindex)"
+								:name="hyphenate('coin', location.name, coindex)"
+								type="checkbox"
+								v-model="coin.collected"
+								@change="serialize"
+							>
+							<label :for="hyphenate('coin', location.name, coindex)"
+								:class="[ coin.collected ? 'strike' : '' ]"
+							>
+								<!-- <strong v-if="coin.episode">Episode: {{ coin.episode }}</strong> -->
+								{{ coin.desc }}
+							</label>
+						</li>
+					</ol>
+				</details>
 
-		</div>
-	</main>
+			</div>
+		</main>
 
-	<p class="text-center">
-		MIT Licensed -
-		Copyright 2020 -
-		<a href="https://github.com/bmcminn">bmcminn</a> Some rights reserved.
-	</p>
+		<p class="text-center">
+			MIT Licensed -
+			Copyright 2020 -
+			<a href="https://github.com/bmcminn">bmcminn</a> Some rights reserved.
+		</p>
+
+	</div>
 
 	<!-- <script src="https://unpkg.com/vue@next/"></script> -->
 	<script src="https://unpkg.com/vue@3.0.1/dist/vue.global.prod.js"></script>
