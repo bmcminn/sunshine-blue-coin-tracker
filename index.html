@@ -29,6 +29,9 @@
 			cursor: pointer;
 		}
 
+		.coin {
+			padding: 0.5em;
+		}
 		.coin input:hover,
 		.coin label:hover {
 			cursor: pointer;
@@ -46,13 +49,32 @@
 
 	<p>
 		Blue coin hunting guide by <a href="https://www.imore.com/author/Reb%20Valentine">Reb Valentine</a>, found at <a href=https://www.imore.com/super-mario-3d-all-stars-blue-coin-hunting-guide-super-mario-sunshine">Super Mario 3D All-Stars: Blue Coin hunting guide for Super Mario Sunshine</a>
-		I merely turned his list into an app to help track my progress.
 	</p>
 
+
 	<details>
-		<summary>Tutorial</summary>
+		<summary>App Info</summary>
+
+		<p>
+			Read the <a href="https://github.com/bmcminn/sunshine-blue-coin-tracker#changelog">Changelog</a> for more updates.
+		</p>
+
+		<h2>Some house keeping:</h2>
+		<p>
+			Please note: I am well aware of the fact there are 240 blue coins in the game. I'm still parsing Reb's list identifying each individual coin as I play through the game myself.
+		</p>
+
+		<p>
+			Also, this list is not written in an optimized order. I merely turned Reb's list into an app to help track my progress while updating some of the coin location descriptions for accuracy and how to easily get them.
+		</p>
+
+		<p>
+			Speed run order may be a future improvement to this list but it's not a priority for me.
+		</p>
+
+		<h2>Tutorial</h2>
 		<ol>
-			<li>Open any of the level names listed below to open that levels blue coin checklist</li>
+			<li>Click/tap any of the level names listed below to open its blue coin checklist</li>
 			<li>Click/tap a given blue coin location description to toggle if you have collected it or not</li>
 			<li>Repeat as necessary</li>
 		</ol>
@@ -60,6 +82,8 @@
 		<p>
 			Each time you check or uncheck a coin, the page URL is updated with a hash your progress, so feel free to bookmark this page to save your progress and share your progress with your friends!
 		</p>
+
+
 	</details>
 
 	<hr>
@@ -82,7 +106,7 @@
 					<span class="small">{{ calcLocationCount(location) }} of {{ location.coins.length }}</span>
 				</summary>
 				<p v-if="location.note">
-					NOTE: {{ location.note }}
+					NOTE: <span v-html="location.note"></span>
 				</p>
 				<ol>
 					<li class="coin"
@@ -94,7 +118,7 @@
 							:name="hyphenate('coin', location.name, coindex)"
 							type="checkbox"
 							v-model="coin.collected"
-							@change="logCoin"
+							@change="serialize"
 						>
 						<label :for="hyphenate('coin', location.name, coindex)"
 							:class="[ coin.collected ? 'strike' : '' ]"
