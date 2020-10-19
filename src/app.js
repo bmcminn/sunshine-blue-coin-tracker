@@ -299,19 +299,16 @@ const App = {
         computed: {
 
             calcCoinCount() {
-                console.debug('faejfklse', 'sfjeakle', true, 123456)
-
                 return this.coinCount = [...this.bcLocations]
                     .map(this.calcLocationCount)
                     .reduce((a, b) => a + b)
             },
 
-
-
         },
 
 
         methods: {
+
             hyphenate,
 
 
@@ -341,30 +338,18 @@ const App = {
             },
 
 
-            deserialize() {
-                let qs = new URLSearchParams(window.location.search)
+            compress(input) {
+                return LZString.compressToBase64(JSON.stringify(input))
+            },
 
-                if (!qs.has('coins')) { return }
 
-                let locations = this.bcLocations
-
-                qs.get('coins').split('|').forEach(location => {
-                    let [index, coins] = location.split(':')
-
-                    index = Number(index)
-
-                    coins.split(',').forEach(coin => {
-                        let coindex = Number(coin)
-                        locations[index].coins[coindex].collected = true
-                    })
-                })
-
-                this.bcLocations = locations
+            decompress(input) {
+                return JSON.parse(LZString.decompressFromBase64(input))
             },
 
 
             serialize() {
-                let locations = []
+                let locations = {}
 
                 this.bcLocations.forEach((location, index) => {
                     let collected = location.coins
@@ -376,7 +361,14 @@ const App = {
                     locations[index] = collected
                 })
 
-                let qs = locations.map((location, index) => `${index}:${location.join(',')}`).filter(el => el.length > 0).join('|')
+                let qs = this.compress(locations)
+                console.debug('locations', locations)
+
+                // let qs = locations.map((location, index) => `${index}:${location.join(',')}`).filter(el => el.length > 0).join('|')
+                // let stats = locations
+                    // .map((location, index) => `${index}:${location.join(',')}`)
+                    // .filter(el => el.length > 0)
+                    // .join('|')
 
                 qs = qs.length > 0 ? '?coins=' + qs : ''
 
@@ -389,10 +381,37 @@ const App = {
             },
 
 
+            deserialize() {
+                let qs = new URLSearchParams(window.location.search)
 
-            logCoin() {
-                this.serialize()
+                if (!qs.has('coins')) { return }
+
+                let locations = this.bcLocations
+
+                console.debug('qs onload', qs)
+                console.debug('coins', qs.get('coins'))
+
+                let locationsData = this.decompress(qs.get('coins'))
+
+                console.debug('locationsData', locationsData)
+
+                Object.keys(locationsData)
+                    .forEach(index => {
+                        if (!locations.hasOwnProperty(index)) { return }
+
+                        locationsData[index].forEach((coin, coindex) => {
+                            locations[index].coins[coindex].collected = true
+                        })
+                    })
+
+                this.bcLocations = locations
             },
+
+
+
+            // logCoin() {
+            //     this.serialize()
+            // },
 
 
             preventNav(event) {
